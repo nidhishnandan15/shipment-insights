@@ -2,7 +2,8 @@
 
 A working prototype for the Code Brew Labs Technical PM task: an internal tool where a logistics manager uploads a CSV of shipment data and asks plain-English questions ("which routes had the most delays last month?") to get back a chart or a table.
 
-> **Live demo:** _[paste Vercel URL after deploy]_
+> **Live demo:** https://shipment-insights.vercel.app
+> **GitHub:** https://github.com/nidhishnandan15/shipment-insights
 > **Loom walkthrough (4 min):** _[paste Loom URL after recording]_
 
 ## What it does
@@ -17,7 +18,7 @@ A working prototype for the Code Brew Labs Technical PM task: an internal tool w
 ## Quick start
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/nidhishnandan15/shipment-insights.git
 cd shipment-insights
 npm install
 cp .env.example .env.local      # optional — paste a Gemini key for plain-English mode
@@ -25,6 +26,8 @@ npm run dev
 ```
 
 Open http://localhost:3000 → click "Or try the sample dataset →" → ask a question.
+
+A free Gemini key (no credit card) is at https://aistudio.google.com/apikey.
 
 ### Two modes
 
