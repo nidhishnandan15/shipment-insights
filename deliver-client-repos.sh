@@ -33,7 +33,6 @@ set -uo pipefail
 
 SOURCE_ORG="Code-Brew-AI"
 TARGET_OWNER="techhelpdesk-commbitz"
-TARGET_IS_ORG=false              # set to true if techhelpdesk-commbitz is an organization, not a user account
 CUTOFF_DATE="2026-03-10"         # client receives code as of this date (exclusive)
 COMMIT_AUTHOR_NAME="Code Brew Labs"
 COMMIT_AUTHOR_EMAIL="delivery@code-brew.com"
@@ -92,9 +91,18 @@ echo "Delivery run $(date -u +%Y-%m-%dT%H:%M:%SZ) — cutoff ${CUTOFF_DATE}" > "
 echo "Source: ${SOURCE_ORG}  Target: ${TARGET_OWNER}" >> "$REPORT"
 echo "----------------------------------------------------------------" >> "$REPORT"
 
+# Detect whether the target is an organization or a user account, so repo
+# creation hits the right endpoint without manual configuration.
+TARGET_TYPE="$(curl -fsS \
+  -H "Authorization: Bearer ${GH_TARGET_TOKEN}" \
+  -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/users/${TARGET_OWNER}" \
+  | grep -o '"type": *"[^"]*"' | head -1 | sed 's/.*"type": *"//;s/"//')"
+echo "Target account type: ${TARGET_TYPE:-unknown}"
+
 create_target_repo() {
   local name="$1" endpoint
-  if [ "$TARGET_IS_ORG" = true ]; then
+  if [ "$TARGET_TYPE" = "Organization" ]; then
     endpoint="https://api.github.com/orgs/${TARGET_OWNER}/repos"
   else
     endpoint="https://api.github.com/user/repos"
